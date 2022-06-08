@@ -4,6 +4,9 @@
 // const columns = document.querySelectorAll(".kanban_column");
 let draggableTask = null;
 
+let taskId = 0;
+let statusId =  0;
+
 function handlerTask() {
     const tasks = document.querySelectorAll(".task");
 
@@ -19,14 +22,24 @@ function dragStart() {
     this.style.display = "none";
   }, 0);
   // console.log("dragStart");
+
 }
 
-function dragEnd() {
+function dragEnd(e) {
     draggableTask = null;
   setTimeout(() => {
     this.style.display = "flex";
   }, 0);
   // console.log("dragEnd");
+
+    taskId = e.target.id.replace("tr_", "");
+    statusId = e.target.parentElement.id;
+
+    console.log(e.target.id);
+    console.log(statusId);
+
+    updateTaskStatus(taskId, statusId);
+
 }
 
 function handlerColumn() {
@@ -39,16 +52,34 @@ function handlerColumn() {
         column.addEventListener("drop", dragDrop);
     });
 
-    let kanbanProcessing = document.getElementById('kanbanProcessing');
-    kanbanProcessing.addEventListener("drop", dragleaveProcessing);
+    // let kanbanProcessing = document.getElementById('kanbanProcessing');
+    // kanbanProcessing.addEventListener("drop", dragleaveProcessing);
+
+    // let kanbanPending = document.getElementById('kanbanPending');
+    // kanbanPending.addEventListener("drop", dragleavePending);
+    //
+    // let kanbanReviewing = document.getElementById('kanbanReviewing');
+    // kanbanReviewing.addEventListener("drop", dragleaveReviewing);
+    //
+    // let kanbanCompleted = document.getElementById('kanbanCompleted');
+    // kanbanCompleted.addEventListener("drop", dragleaveCompleted);
+
+
+
 }
 
 function dragleaveProcessing(e) {
-    let id = e.currentTarget.id;
+    let id = e.target.id;
+    console.log(id);
     // console.log(e.currentTarget.id);
     // console.log("dragleaveProcessing");
-    updateTaskStatus(1122);
+
+    // updateTaskStatus(id, 2);
 }
+
+
+
+
 
 function dragOver(e) {
   e.preventDefault();

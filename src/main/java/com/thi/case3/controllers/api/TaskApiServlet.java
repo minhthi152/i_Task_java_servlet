@@ -28,9 +28,9 @@ public class TaskApiServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        switch (action){
+        switch (action) {
             case "getAllTasks":
-                getAllTasks(req,resp);
+                getAllTasks(req, resp);
                 break;
             case "change-status":
                 changeStatus(req, resp);
@@ -44,9 +44,9 @@ public class TaskApiServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        switch (action){
+        switch (action) {
             case "create":
-                createTask(req,resp);
+                createTask(req, resp);
                 break;
         }
     }
@@ -85,8 +85,9 @@ public class TaskApiServlet extends HttpServlet {
 
     private void changeStatus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
+        int statusId = Integer.parseInt(req.getParameter("statusId"));
 
-        taskService.changeStatus(id);
+        taskService.changeStatus(id, statusId);
     }
 
 }

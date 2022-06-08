@@ -34,7 +34,7 @@
     </div>
 
     <div class="kanban">
-        <div class="kanban_column kanban_column-pending">
+        <div id="1" class="kanban_column kanban_column-pending" >
             <div class="kanban_column-title">
                 <h4>PENDING</h4>
             </div>
@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <div id="kanbanProcessing" class="kanban_column kanban_column-processing">
+        <div id="2" class="kanban_column kanban_column-processing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
@@ -82,7 +82,7 @@
         </div>
 
 
-        <div class="kanban_column kanban_column-reviewing">
+        <div id="3" class="kanban_column kanban_column-reviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
@@ -105,7 +105,7 @@
 
         </div>
 
-        <div class="kanban_column kanban_column-completed">
+        <div id ="4" class="kanban_column kanban_column-completed">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
@@ -152,7 +152,7 @@
     function createTask(task) {
         axios({
             method: 'post',
-            url: 'http://localhost:8089/api/i-task?action=create',
+            url: 'http://localhost:8080/api/i-task?action=create',
             data: task
         })
             .then(function (response) {
@@ -182,17 +182,18 @@
             });
     }
 
-    function updateTaskStatus(id) {
+    function updateTaskStatus(id, statusId) {
         axios({
             method: 'get',
-            url: 'http://localhost:8089/api/i-task?action=change-status&id=' + id,
+            url: 'http://localhost:8080/api/i-task?action=change-status&id=' + id + '&statusId=' + statusId,
         })
+
     }
 
     function getAllTasks() {
         axios({
             method: 'get',
-            url: 'http://localhost:8089/api/i-task?action=getAllTasks'
+            url: 'http://localhost:8080/api/i-task?action=getAllTasks'
         })
             .then(function (response) {
                 let taskArr = [];
