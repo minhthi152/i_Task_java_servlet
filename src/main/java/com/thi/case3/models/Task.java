@@ -14,7 +14,25 @@ public class Task {
     private Status status;
     private String description;
     private String avatar;
+
     public Task() {
+    }
+
+    public Task(String taskName, String deadline, int createdBy, Status status, String description) {
+        this.taskName = taskName;
+        this.deadline = deadline;
+        this.createdBy = createdBy;
+        this.status = status;
+        this.description = description;
+    }
+
+    public Task(long id, String taskName, String deadline, int createdBy, Status status, String description) {
+        this.id = id;
+        this.taskName = taskName;
+        this.deadline = deadline;
+        this.createdBy = createdBy;
+        this.status = status;
+        this.description = description;
     }
 
     public Task(long id, String taskName, String createDate, String deadline, int createdBy, int updatedBy, List<Performer> performers, String lastUpdate, Status status, String description) {
@@ -25,6 +43,18 @@ public class Task {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.performers = performers;
+        this.lastUpdate = lastUpdate;
+        this.status = status;
+        this.description = description;
+    }
+
+    public Task(long id, String taskName, String createDate, String deadline, int createdBy, int updatedBy, String lastUpdate, Status status, String description) {
+        this.id = id;
+        this.taskName = taskName;
+        this.createDate = createDate;
+        this.deadline = deadline;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
         this.lastUpdate = lastUpdate;
         this.status = status;
         this.description = description;
@@ -42,6 +72,8 @@ public class Task {
         this.description = description;
         this.avatar = avatar;
     }
+
+
 
     public long getId() {
         return id;

@@ -39,27 +39,27 @@
                 <h4>PENDING</h4>
             </div>
             <button class="kanban_add-item" id="btn-add-task" type="button">+ Add</button>
-
-            <c:forEach var = "pendingTask" items="${pendingTasks}">
-                <div class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${pendingTask.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${pendingTask.getDeadline()}</div>
+            <div id="taskPending">
+                <c:forEach var = "pendingTask" items="${pendingTasks}">
+                    <div id="tr_${pendingTask.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${pendingTask.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${pendingTask.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${pendingTask.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${pendingTask.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
-
+                </c:forEach>
+            </div>
         </div>
 
-        <div class="kanban_column kanban_column-processing">
+        <div id="kanbanProcessing" class="kanban_column kanban_column-processing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
@@ -79,8 +79,6 @@
                     </div>
                 </div>
             </c:forEach>
-
-
         </div>
 
 
@@ -137,5 +135,100 @@
 
 
 <script src="/assets/script.js"></script>
+<script src="/assets/js/axios.min.js"></script>
+
+<script>
+    let btnNewTask = document.getElementById("btn-new-task");
+
+    btnNewTask.addEventListener("click", function () {
+        let task = {
+            taskName: document.getElementById('input-new-task').value,
+            deadline: document.getElementById('input-new-deadline').value
+        }
+
+        createTask(task);
+    })
+
+    function createTask(task) {
+        axios({
+            method: 'post',
+            url: 'http://localhost:8089/api/i-task?action=create',
+            data: task
+        })
+            .then(function (response) {
+
+                let str = `
+                    <div id="tr_\${response.data.id}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">\${response.data.taskName}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>\${response.data.deadline}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="\${response.data.avatar}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                let taskPending = document.getElementById('taskPending');
+                taskPending.insertAdjacentHTML('afterbegin', str);
+
+                handlerTask();
+                handlerColumn();
+            });
+    }
+
+    function updateTaskStatus(id) {
+        axios({
+            method: 'get',
+            url: 'http://localhost:8089/api/i-task?action=change-status&id=' + id,
+        })
+    }
+
+    function getAllTasks() {
+        axios({
+            method: 'get',
+            url: 'http://localhost:8089/api/i-task?action=getAllTasks'
+        })
+            .then(function (response) {
+                let taskArr = [];
+                taskArr = response.data;
+
+                taskArr.forEach(item => {
+                    let str = `
+                        <div id="tr_\${item.id}" class="task" draggable="true">
+                            <div class="sub-task">
+                                <div class = "title">\${item.taskName}</div>
+                                <div class="time"><i class="far fa-calendar-alt"></i>\${item.deadline}</div>
+                            </div>
+                            <div class="div-image" >
+                                <img class = "avatar" src="\${item.avatar}" alt="">
+                                <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                                <ul class="task-menu">
+                                    <li><i class="fa fa-pencil"></i>Detail</li>
+                                    <li><i class="fa fa-remove"></i>Delete</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+
+                    let taskPending = document.getElementById('taskPending');
+                    taskPending.insertAdjacentHTML('afterbegin', str);
+                });
+
+                handlerTask();
+                handlerColumn();
+            });
+    }
+
+    window.onload = function() {
+        getAllTasks();
+    }
+</script>
+
 </body>
 </html>

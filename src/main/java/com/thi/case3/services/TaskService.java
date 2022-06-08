@@ -6,10 +6,7 @@ import com.thi.case3.models.Task;
 import com.thi.case3.models.User;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +30,15 @@ public class TaskService implements ITaskService{
             "JOIN users AS u " +
             "ON t.creator_id = u.id " +
             "WHERE t.status_id = ?;";
+
+    private final String UPDATE_STATUS_BY_ID = ""+
+            "UPDATE tasks AS t " +
+            "SET t.status_id = ? " +
+            "WHERE t.id = ?;";
+
+
+    private final String SP_CREATE_TASK = "{CALL sp_create_task(?, ?, ?, ?, ?)}";
+
     @Override
     public List<Task> getTasksByStatus(Status status) {
         List<Task> tasks = new ArrayList<>();
@@ -72,8 +78,51 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public void addTask(Task newTask) {
+    public Task addTask(Task newTask) {
+        Task createdTask = null;
+        try{
+            Connection connection = getConnection();
+            CallableStatement statement = connection.prepareCall(SP_CREATE_TASK);
+            statement.setString(1,newTask.getTaskName());
+            statement.setString(2, newTask.getDeadline());
+            statement.setInt(3, newTask.getCreatedBy());
+            statement.setInt(4, newTask.getStatus().getValue());
+            statement.setString(5, newTask.getDescription());
 
+            System.out.println(statement);
+            ResultSet rs =  statement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String taskName = rs.getString("task_name");
+                String createDate = rs.getString("create_date");
+                String deadline = rs.getString("deadline");
+                int creatorId = rs.getInt("creator_id");
+                String lastUpdate = rs.getString("last_update");
+                int updatedBy = rs.getInt("updated_by");
+                int statusId = rs.getInt("status_id");
+                String description = rs.getString("description_");
+                String avatar = rs.getString("avatar");
+                createdTask = new Task(id,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,Status.parseStatus(statusId),description, avatar);
+            }
+
+        } catch (SQLException e){
+            printSQLException(e);
+        }
+        return createdTask;
+    }
+
+    @Override
+    public void changeStatus(int taskId) {
+        try{
+            Connection connection = getConnection();
+            CallableStatement statement = connection.prepareCall(UPDATE_STATUS_BY_ID);
+            statement.setInt(1, Status.PROCESSING.getValue());
+            statement.setInt(2, taskId);
+            statement.execute();
+        } catch (SQLException e){
+            printSQLException(e);
+        }
     }
 
     @Override

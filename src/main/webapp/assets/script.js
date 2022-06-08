@@ -1,20 +1,24 @@
 /* drag and drop */
 
-const tasks = document.querySelectorAll(".task");
-const columns = document.querySelectorAll(".kanban_column");
+// const tasks = document.querySelectorAll(".task");
+// const columns = document.querySelectorAll(".kanban_column");
 let draggableTask = null;
 
-tasks.forEach((task) => {
-    task.addEventListener("dragstart", dragStart);
-    task.addEventListener("dragend", dragEnd);
-});
+function handlerTask() {
+    const tasks = document.querySelectorAll(".task");
+
+    tasks.forEach((task) => {
+        task.addEventListener("dragstart", dragStart);
+        task.addEventListener("dragend", dragEnd);
+    });
+}
 
 function dragStart() {
     draggableTask = this;
   setTimeout(() => {
     this.style.display = "none";
   }, 0);
-  console.log("dragStart");
+  // console.log("dragStart");
 }
 
 function dragEnd() {
@@ -22,15 +26,29 @@ function dragEnd() {
   setTimeout(() => {
     this.style.display = "flex";
   }, 0);
-  console.log("dragEnd");
+  // console.log("dragEnd");
 }
 
-columns.forEach((column) => {
-    column.addEventListener("dragover", dragOver);
-    column.addEventListener("dragenter", dragEnter);
-    column.addEventListener("dragleave", dragLeave);
-    column.addEventListener("drop", dragDrop);
-});
+function handlerColumn() {
+    const columns = document.querySelectorAll(".kanban_column");
+
+    columns.forEach((column) => {
+        column.addEventListener("dragover", dragOver);
+        column.addEventListener("dragenter", dragEnter);
+        column.addEventListener("dragleave", dragLeave);
+        column.addEventListener("drop", dragDrop);
+    });
+
+    let kanbanProcessing = document.getElementById('kanbanProcessing');
+    kanbanProcessing.addEventListener("drop", dragleaveProcessing);
+}
+
+function dragleaveProcessing(e) {
+    let id = e.currentTarget.id;
+    // console.log(e.currentTarget.id);
+    // console.log("dragleaveProcessing");
+    updateTaskStatus(1122);
+}
 
 function dragOver(e) {
   e.preventDefault();
@@ -39,18 +57,18 @@ function dragOver(e) {
 
 function dragEnter() {
   this.style.border = "2px dashed #ccc";
-  console.log("dragEnter");
+  // console.log("dragEnter");
 }
 
 function dragLeave() {
   this.style.border = "none";
-  console.log("dragLeave");
+  // console.log("dragLeave");
 }
 
 function dragDrop() {
   this.style.border = "none";
   this.appendChild(draggableTask);
-  console.log("dropped");
+  // console.log("dropped");
 }
 
  /* end  for drag and drop */

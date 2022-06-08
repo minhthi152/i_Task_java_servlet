@@ -9,7 +9,9 @@ public interface ITaskService {
     List<Task> getTasksByStatus(Status status) ;
     void update();
 
-    void addTask(Task newTask) ;
+    Task addTask(Task newTask) ;
+
+    void changeStatus(int taskId);
 
     Task getByTaskId(long TaskId) ;
 

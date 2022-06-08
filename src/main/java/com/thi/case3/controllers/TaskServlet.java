@@ -1,5 +1,6 @@
 package com.thi.case3.controllers;
 
+import com.google.gson.JsonObject;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
 import com.thi.case3.services.ITaskService;
@@ -14,9 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+
 @WebServlet(name = "TaskServlet", urlPatterns = "/i-Task")
 public class TaskServlet extends HttpServlet {
     ITaskService taskService = new TaskService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -36,8 +39,6 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
-
-
     private void showSignInPage(HttpServletRequest req, HttpServletResponse resp) {
         try {
             resp.sendRedirect("/signIn");
@@ -48,9 +49,10 @@ public class TaskServlet extends HttpServlet {
 
     private void showAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/main.jsp");
-        List<Task> pendingTasks = taskService.getTasksByStatus(Status.PENDING);
-        System.out.println(pendingTasks);
-        req.setAttribute("pendingTasks", pendingTasks);
+
+//        List<Task> pendingTasks = taskService.getTasksByStatus(Status.PENDING);
+//        System.out.println(pendingTasks);
+//        req.setAttribute("pendingTasks", pendingTasks);
 
         List<Task> processingTasks = taskService.getTasksByStatus(Status.PROCESSING);
         req.setAttribute("processingTasks", processingTasks);
