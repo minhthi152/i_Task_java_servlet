@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.thi.case3.utils.ValidateUtils;
 
 @WebServlet(name = "TaskApiServlet", urlPatterns = "/api/i-task")
 public class TaskApiServlet extends HttpServlet {
@@ -47,6 +48,19 @@ public class TaskApiServlet extends HttpServlet {
         switch (action){
             case "create":
                 createTask(req,resp);
+                break;
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        switch (action){
+            case "delete":
+                deleteTask(req,resp);
                 break;
         }
     }
@@ -84,9 +98,35 @@ public class TaskApiServlet extends HttpServlet {
     }
 
     private void changeStatus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+        int taskId = Integer.parseInt(req.getParameter("taskId"));
+        int statusId = Integer.parseInt(req.getParameter("statusId"));
 
-        taskService.changeStatus(id);
+        taskService.changeStatus(statusId, taskId);
+    }
+
+    private void deleteTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String json = null;
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        String strId = req.getParameter("taskId");
+
+        if (!ValidateUtils.isNumberValid(strId)) {
+            json = new Gson().toJson("Invalid ID");
+        }
+        else {
+            int taskId = Integer.parseInt(strId);
+            boolean deleted =  taskService.remove(taskId);
+
+            if (deleted) {
+                json = new Gson().toJson("success");
+            }
+            else {
+                json = new Gson().toJson("error");
+            }
+        }
+
+        resp.getWriter().write(json);
     }
 
 }

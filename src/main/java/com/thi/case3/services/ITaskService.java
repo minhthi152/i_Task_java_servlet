@@ -11,14 +11,15 @@ public interface ITaskService {
 
     Task addTask(Task newTask) ;
 
-    void changeStatus(int taskId);
+    void changeStatus(int statusId, int taskId);
 
     Task getByTaskId(long TaskId) ;
 
     boolean existById(long TaskId) ;
+
     boolean checkDuplicateId(long id);
 
     void update(Task task);
 
-    void remove(Task task);
+    boolean remove(int taskId);
 }

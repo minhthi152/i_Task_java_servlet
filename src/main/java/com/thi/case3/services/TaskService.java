@@ -16,16 +16,16 @@ import static com.thi.case3.utils.MySQLConnection.printSQLException;
 public class TaskService implements ITaskService{
     private final String GET_TASKS_BY_STATUS = ""+
             "SELECT " +
-            "t.id, " +
-            "t.task_name, " +
-            "t.create_date, " +
-            "t.deadline, " +
-            "t.creator_id, " +
-            "t.last_update, " +
-            "t.updated_by, " +
-            "t.status_id, " +
-            "t.description_, " +
-            "u.avatar " +
+                "t.id, " +
+                "t.task_name, " +
+                "t.create_date, " +
+                "t.deadline, " +
+                "t.creator_id, " +
+                "t.last_update, " +
+                "t.updated_by, " +
+                "t.status_id, " +
+                "t.description_, " +
+                "u.avatar " +
             "FROM tasks AS t " +
             "JOIN users AS u " +
             "ON t.creator_id = u.id " +
@@ -34,6 +34,10 @@ public class TaskService implements ITaskService{
     private final String UPDATE_STATUS_BY_ID = ""+
             "UPDATE tasks AS t " +
             "SET t.status_id = ? " +
+            "WHERE t.id = ?;";
+
+    private final String DELETE_STATUS_BY_ID = ""+
+            "DELETE FROM tasks AS t " +
             "WHERE t.id = ?;";
 
 
@@ -63,7 +67,7 @@ public class TaskService implements ITaskService{
                 String avatar = rs.getString("avatar");
 
 
-                tasks.add(new Task(id,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,status,description, avatar));
+                tasks.add(new Task(id, taskName, createDate, deadline, creatorId, updatedBy, lastUpdate, status, description, avatar));
             }
 
         } catch (SQLException e){
@@ -113,11 +117,11 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public void changeStatus(int taskId) {
+    public void changeStatus(int statusId, int taskId) {
         try{
             Connection connection = getConnection();
             CallableStatement statement = connection.prepareCall(UPDATE_STATUS_BY_ID);
-            statement.setInt(1, Status.PROCESSING.getValue());
+            statement.setInt(1, statusId);
             statement.setInt(2, taskId);
             statement.execute();
         } catch (SQLException e){
@@ -146,7 +150,20 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public void remove(Task task) {
+    public boolean remove(int taskId) {
+        boolean isDeleted = false;
 
+        try{
+            Connection connection = getConnection();
+            CallableStatement statement = connection.prepareCall(DELETE_STATUS_BY_ID);
+            statement.setInt(1, taskId);
+            statement.execute();
+
+            isDeleted = true;
+        } catch (SQLException e){
+            printSQLException(e);
+        }
+
+        return isDeleted;
     }
 }

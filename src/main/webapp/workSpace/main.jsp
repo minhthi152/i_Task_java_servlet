@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,18 +41,18 @@
             </div>
             <button class="kanban_add-item" id="btn-add-task" type="button">+ Add</button>
             <div id="taskPending">
-                <c:forEach var = "pendingTask" items="${pendingTasks}">
-                    <div id="tr_${pendingTask.getId()}" class="task" draggable="true">
+                <c:forEach var="item" items="${pendingTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
-                            <div class = "title">${pendingTask.getTaskName()}</div>
-                            <div class="time"><i class="far fa-calendar-alt"></i>${pendingTask.getDeadline()}</div>
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
                         </div>
                         <div class="div-image" >
-                            <img class = "avatar" src="${pendingTask.getAvatar()}" alt="">
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
                             <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                             <ul class="task-menu">
                                 <li><i class="fa fa-pencil"></i>Detail</li>
-                                <li><i class="fa fa-remove"></i>Delete</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                             </ul>
                         </div>
                     </div>
@@ -59,22 +60,22 @@
             </div>
         </div>
 
-        <div id="kanbanProcessing" class="kanban_column kanban_column-processing">
+        <div id="taskProcessing" class="kanban_column kanban_column-processing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
-            <c:forEach var="processingTask" items="${processingTasks}">
-                <div class="task" draggable="true">
+            <c:forEach var="item" items="${processingTasks}">
+                <div id="tr_${item.getId()}" class="task" draggable="true">
                     <div class="sub-task">
-                        <div class = "title">${processingTask.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${processingTask.getDeadline()}</div>
+                        <div class = "title">${item.getTaskName()}</div>
+                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
                     </div>
                     <div class="div-image" >
-                        <img class = "avatar" src="${processingTask.getAvatar()}" alt="">
+                        <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
                             <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li><i class="fa fa-remove"></i>Delete</li>
+                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
                 </div>
@@ -82,50 +83,48 @@
         </div>
 
 
-        <div class="kanban_column kanban_column-reviewing">
+        <div id="taskReviewing" class="kanban_column kanban_column-reviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
-            <c:forEach var="reviewingTask" items="${reviewingTasks}">
-                <div class="task" draggable="true">
+            <c:forEach var="item" items="${reviewingTasks}">
+                <div id="tr_${item.getId()}" class="task" draggable="true">
                     <div class="sub-task">
-                        <div class = "title">${reviewingTask.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${reviewingTask.getDeadline()}</div>
+                        <div class = "title">${item.getTaskName()}</div>
+                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
                     </div>
                     <div class="div-image" >
-                        <img class = "avatar" src="${reviewingTask.getAvatar()}" alt="">
+                        <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
                             <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li><i class="fa fa-remove"></i>Delete</li>
+                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
                 </div>
             </c:forEach>
-
         </div>
 
-        <div class="kanban_column kanban_column-completed">
+        <div id="taskCompleted" class="kanban_column kanban_column-completed">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
-            <c:forEach var="completedTask" items="${completedTasks}">
-                <div class="task" draggable="true">
+            <c:forEach var="item" items="${completedTasks}">
+                <div id="tr_${item.getId()}" class="task" draggable="true">
                     <div class="sub-task">
-                        <div class = "title">${completedTask.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${completedTask.getDeadline()}</div>
+                        <div class = "title">${item.getTaskName()}</div>
+                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
                     </div>
                     <div class="div-image" >
-                        <img class = "avatar" src="${completedTask.getAvatar()}" alt="">
+                        <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
                             <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li><i class="fa fa-remove"></i>Delete</li>
+                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
                 </div>
             </c:forEach>
-
         </div>
 
     </div>
@@ -168,7 +167,7 @@
                             <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                             <ul class="task-menu">
                                 <li><i class="fa fa-pencil"></i>Detail</li>
-                                <li><i class="fa fa-remove"></i>Delete</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                             </ul>
                         </div>
                     </div>
@@ -182,10 +181,24 @@
             });
     }
 
-    function updateTaskStatus(id) {
+    function updateTaskStatus(statusId, taskId) {
         axios({
             method: 'get',
-            url: 'http://localhost:8089/api/i-task?action=change-status&id=' + id,
+            url: 'http://localhost:8089/api/i-task?action=change-status&statusId=' + statusId + '&taskId=' + taskId,
+        })
+    }
+
+    function deleteTask(taskId) {
+        axios({
+            method: 'delete',
+            url: 'http://localhost:8089/api/i-task?action=delete&taskId=' + taskId,
+        })
+        .then(function (response) {
+            let data = response.data;
+
+            if (data === "success") {
+                document.getElementById("tr_" + taskId).remove();
+            }
         })
     }
 
@@ -210,7 +223,7 @@
                                 <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                                 <ul class="task-menu">
                                     <li><i class="fa fa-pencil"></i>Detail</li>
-                                    <li><i class="fa fa-remove"></i>Delete</li>
+                                    <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                                 </ul>
                             </div>
                         </div>
@@ -222,7 +235,20 @@
 
                 handlerTask();
                 handlerColumn();
+
+                handlerDelete();
             });
+    }
+
+    function handlerDelete() {
+        let btnDelete = document.querySelectorAll(".delete");
+
+        btnDelete.forEach(item => {
+            item.addEventListener("click", function (e) {
+                let id = e.target.parentElement.parentElement.parentElement.id.replace("tr_", "");
+                deleteTask(id);
+            })
+        })
     }
 
     window.onload = function() {

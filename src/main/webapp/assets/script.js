@@ -4,6 +4,13 @@
 // const columns = document.querySelectorAll(".kanban_column");
 let draggableTask = null;
 
+const PENDING = 1;
+const PROCESSING = 2;
+const REVIEWING = 3;
+const COMPLETED = 4;
+
+let taskId = 0;
+
 function handlerTask() {
     const tasks = document.querySelectorAll(".task");
 
@@ -21,12 +28,16 @@ function dragStart() {
   // console.log("dragStart");
 }
 
-function dragEnd() {
+function dragEnd(e) {
     draggableTask = null;
-  setTimeout(() => {
-    this.style.display = "flex";
-  }, 0);
-  // console.log("dragEnd");
+
+    taskId = e.target.id.replace("tr_", "");
+
+    setTimeout(() => {
+        this.style.display = "flex";
+    }, 0);
+
+    // console.log("dragEnd");
 }
 
 function handlerColumn() {
@@ -39,15 +50,45 @@ function handlerColumn() {
         column.addEventListener("drop", dragDrop);
     });
 
-    let kanbanProcessing = document.getElementById('kanbanProcessing');
-    kanbanProcessing.addEventListener("drop", dragleaveProcessing);
+    let taskPending = document.getElementById('taskPending');
+    taskPending.addEventListener("drop", dropLeavePending);
+
+    let taskProcessing = document.getElementById('taskProcessing');
+    taskProcessing.addEventListener("drop", dropLeaveProcessing);
+
+    let taskReviewing = document.getElementById('taskReviewing');
+    taskReviewing.addEventListener("drop", dropLeaveReviewing);
+
+    let taskCompleted = document.getElementById('taskCompleted');
+    taskCompleted.addEventListener("drop", dropLeaveCompleted);
 }
 
-function dragleaveProcessing(e) {
-    let id = e.currentTarget.id;
-    // console.log(e.currentTarget.id);
-    // console.log("dragleaveProcessing");
-    updateTaskStatus(1122);
+function dropLeavePending() {
+    setTimeout(() => {
+        console.log("dropLeavePending");
+        updateTaskStatus(PENDING, taskId);
+    }, 500);
+}
+
+function dropLeaveProcessing() {
+    setTimeout(() => {
+        console.log("dropLeaveProcessing");
+        updateTaskStatus(PROCESSING, taskId);
+    }, 500);
+}
+
+function dropLeaveReviewing() {
+    setTimeout(() => {
+        console.log("dropLeaveReviewing");
+        updateTaskStatus(REVIEWING, taskId);
+    }, 500);
+}
+
+function dropLeaveCompleted() {
+    setTimeout(() => {
+        console.log("dropLeaveCompleted");
+        updateTaskStatus(COMPLETED, taskId);
+    }, 500);
 }
 
 function dragOver(e) {
