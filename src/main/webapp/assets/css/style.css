@@ -13,7 +13,20 @@ body{
 #header{
     background-color: #198754;
     padding-top: 15px;
+    padding-right: 12px;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+a.btn-logout {
+    color: #fff;
+    text-decoration: none;
+}
+
+a.btn-logout:hover {
+    color: #f4c400;
+}
+
 /* css pop up create task form */
 #create-task-div{
     align-items: center;
@@ -52,11 +65,15 @@ body{
     width: 100%;
 
 }
+.kanban_column {
+    padding-bottom: 90px;
+}
+
 .kanban_column-pending{
     flex: 1;
-    /*background: #f1c40f;*/
-    border-radius: 4px;
-    background: #fff;
+    background: #f1c40f;
+    /*border-radius: 4px;*/
+    /*background: #fff;*/
 
 
 }
@@ -64,24 +81,24 @@ body{
 .kanban_column-processing{
 
     flex: 1;
-    /*background: #7cce11;*/
-    background: #fff;
-    border-radius: 4px;
+    background: #7cce11;
+    /*background: #fff;*/
+    /*border-radius: 4px;*/
 }
 .kanban_column-reviewing{
 
     flex: 1;
-    /*background: #29e2bd;*/
-    border-radius: 4px;
-    background: #fff;
+    background: #29e2bd;
+    /*border-radius: 4px;*/
+    /*background: #fff;*/
 }
 
 .kanban_column-completed{
 
     flex: 1;
-    /*background: #df298d;*/
-    border-radius: 4px;
-    background: #fff;
+    background: #df298d;
+    /*border-radius: 4px;*/
+    /*background: #fff;*/
 }
 
 
@@ -217,3 +234,12 @@ body{
     background-color: #fff;
 }
 /* end css task details */
+
+
+.iconAvatar{
+    position: absolute;
+    top: -5px;
+    left: 31px;
+    color: #0d6efd;
+
+}

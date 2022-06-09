@@ -52,7 +52,7 @@
                             <img class = "avatar" src="${item.getAvatar()}" alt="">
                             <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                             <ul class="task-menu">
-                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
                                 <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                             </ul>
                         </div>
@@ -75,7 +75,7 @@
                         <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
+                            <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
                             <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
@@ -98,7 +98,7 @@
                         <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
+                            <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
                             <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
@@ -120,7 +120,10 @@
                         <img class = "avatar" src="${item.getAvatar()}" alt="">
                         <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                         <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
+                            <li>
+                                <i class="fa fa-pencil"></i>
+                                <a href="/i-Task?action=detail&id=${item.getId()}">Detail</a>
+                            </li>
                             <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                         </ul>
                     </div>
@@ -150,7 +153,7 @@
     function createTask(task) {
         axios({
             method: 'post',
-            url: 'http://localhost:8089/api/i-task?action=create',
+            url: 'http://localhost:8080/api/i-task?action=create',
             data: task
         })
             .then(function (response) {
@@ -176,7 +179,7 @@
                                 <img class = "avatar" src="\${response.data.avatar}" alt="">
                                 <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                                 <ul class="task-menu">
-                                    <li><i class="fa fa-pencil"></i>Detail</li>
+                                    <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${task.getId()}">Detail</a></li>
                                     <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                                 </ul>
                             </div>
@@ -202,7 +205,7 @@
     function updateTaskStatus(statusId, taskId) {
         axios({
             method: 'get',
-            url: 'http://localhost:8089/api/i-task?action=change-status&statusId=' + statusId + '&taskId=' + taskId,
+            url: 'http://localhost:8080/api/i-task?action=change-status&statusId=' + statusId + '&taskId=' + taskId,
         })
             .then(function (response) {
                 let data = response.data;
@@ -221,7 +224,7 @@
     function deleteTask(taskId) {
         axios({
             method: 'delete',
-            url: 'http://localhost:8089/api/i-task?action=delete&taskId=' + taskId,
+            url: 'http://localhost:8080/api/i-task?action=delete&taskId=' + taskId,
         })
         .then(function (response) {
             let data = response.data;
@@ -244,7 +247,7 @@
     function getAllTasks() {
         axios({
             method: 'get',
-            url: 'http://localhost:8089/api/i-task?action=getAllTasks'
+            url: 'http://localhost:8080/api/i-task?action=getAllTasks'
         })
             .then(function (response) {
                 let taskArr = [];
@@ -261,7 +264,7 @@
                                 <img class = "avatar" src="\${item.avatar}" alt="">
                                 <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                                 <ul class="task-menu">
-                                    <li><i class="fa fa-pencil"></i>Detail</li>
+                                    <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail">Detail</a></li>
                                     <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                                 </ul>
                             </div>

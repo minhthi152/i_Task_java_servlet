@@ -1,5 +1,6 @@
 package com.thi.case3.services;
 
+import com.thi.case3.controllers.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
 
@@ -13,7 +14,7 @@ public interface ITaskService {
 
     boolean changeStatus(int statusId, int taskId);
 
-    Task getByTaskId(long TaskId) ;
+    TaskDTO getDetailsByTaskId(long TaskId) ;
 
     boolean existById(long TaskId) ;
 

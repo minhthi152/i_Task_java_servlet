@@ -98,4 +98,11 @@ public class UserService implements IUserService{
     public User getUserById(int id) {
         return null;
     }
+
+
+    public User getCreatorByTaskId(long taskId){
+
+
+        return null;
+    }
 }

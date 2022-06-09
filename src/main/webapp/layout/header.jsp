@@ -1,10 +1,10 @@
-<div class="row" id="header">
+<div class="" id="header">
     <div class="mb-3 col-md-3">
         <div class="row">
             <div class="col-sm-8">
 
                 <button type="button" class="btn btn-success">
-                    <a style="font-size: 20px; color:#fff;font-weight:700;">
+                    <a style="font-size: 20px; color:#fff;font-weight:700;" href="/i-Task">
                         <i class="fa-solid fa-house" style="padding-left: 20px; font-size: 30px; color: #fff;"></i>   i-Task!
                     </a>
                 </button>
@@ -42,7 +42,7 @@
 
         <div class="col-sm-12">
             <button type="button" class="btn btn-success">
-                <a>
+                <a href="/i-Task?action=user-info">
                     <i class="fa-solid fa-user"></i> Your Info
                 </a>
             </button>
@@ -58,7 +58,7 @@
             </div>
             <div class="col-sm-8">
                 <button type="button" class="btn btn-success">
-                    <a href="/i-Task?action=logOut">
+                    <a class="btn-logout" href="/i-Task?action=logOut">
                         <i class="fa-solid fa-right-from-bracket"></i> Log out
                     </a>
                 </button>

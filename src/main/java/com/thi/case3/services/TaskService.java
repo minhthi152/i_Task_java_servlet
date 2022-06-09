@@ -1,5 +1,6 @@
 package com.thi.case3.services;
 
+import com.thi.case3.controllers.dto.TaskDTO;
 import com.thi.case3.models.Performer;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
@@ -42,6 +43,28 @@ public class TaskService implements ITaskService{
 
 
     private final String SP_CREATE_TASK = "{CALL sp_create_task(?, ?, ?, ?, ?)}";
+
+
+    private final String FIND_DETAILS_TASK_BY_ID = "" +
+            "SELECT " +
+             "t.id, " +
+             "t.task_name, " +
+             "t.create_date, " +
+             "t.deadline, " +
+             "t.creator_id, " +
+             "t.last_update, " +
+             "t.updated_by, " +
+             "t.status_id, " +
+             "t.description_, " +
+             "u.avatar, " +
+             "u.fullName, " +
+             "ts.status_ " +
+            "FROM tasks AS t " +
+            "JOIN users AS u " +
+            "ON t.creator_id = u.id " +
+            "JOIN task_status AS ts " +
+            "ON t.status_id = ts.id " +
+            "WHERE t.id = ?;";
 
     @Override
     public List<Task> getTasksByStatus(Status status) {
@@ -136,8 +159,39 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public Task getByTaskId(long TaskId) {
-        return null;
+    public TaskDTO getDetailsByTaskId(long taskId) {
+
+        TaskDTO taskDTO = null;
+
+        try {
+            Connection connection = getConnection();
+
+            CallableStatement callableStatement = connection.prepareCall(FIND_DETAILS_TASK_BY_ID);
+
+            callableStatement.setLong(1, taskId);
+
+            System.out.println(callableStatement);
+
+            ResultSet rs = callableStatement.executeQuery();
+
+            while (rs.next()) {
+                String taskName = rs.getString("task_name");
+                String createDate = rs.getString("create_date");
+                String deadline = rs.getString("deadline");
+                int creatorId = rs.getInt("creator_id");
+                String lastUpdate = rs.getString("last_update");
+                int updatedBy = rs.getInt("updated_by");
+                int statusId = rs.getInt("status_id");
+                String description = rs.getString("description_");
+                String avatar = rs.getString("avatar");
+                String creatorFullName = rs.getString("fullName");
+                String statusName = rs.getString("status_");
+                taskDTO = new TaskDTO(taskId,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,Status.parseStatus(statusId),description, avatar, creatorFullName, statusName );
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return taskDTO;
     }
 
     @Override

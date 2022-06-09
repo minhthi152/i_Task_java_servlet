@@ -1,6 +1,7 @@
 package com.thi.case3.controllers;
 
 import com.google.gson.JsonObject;
+import com.thi.case3.controllers.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
 import com.thi.case3.services.ITaskService;
@@ -38,8 +39,11 @@ public class TaskServlet extends HttpServlet {
                 case "logOut":
                     showSignInPage(req,resp);
                     break;
-                case "delete":
-                    deleteTask(req,resp);
+                case "user-info":
+                    showUserInfoPage(req,resp);
+                    break;
+                case "detail":
+                    showDetailPage(req,resp);
                     break;
                 default:
                     showAll(req, resp);
@@ -47,6 +51,8 @@ public class TaskServlet extends HttpServlet {
             }
         }
     }
+
+
 
     private void showSignInPage(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -79,7 +85,24 @@ public class TaskServlet extends HttpServlet {
 
     }
 
-    private void deleteTask(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void showUserInfoPage(HttpServletRequest req, HttpServletResponse resp) {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/userInfo.jsp");
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+    private void showDetailPage(HttpServletRequest req, HttpServletResponse resp) {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/detail.jsp");
+        long taskId = Long.parseLong(req.getParameter("id"));
+        TaskDTO taskDTO = taskService.getDetailsByTaskId(taskId);
+        req.setAttribute("task", taskDTO);
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
