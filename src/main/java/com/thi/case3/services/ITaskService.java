@@ -11,7 +11,7 @@ public interface ITaskService {
 
     Task addTask(Task newTask) ;
 
-    void changeStatus(int statusId, int taskId);
+    boolean changeStatus(int statusId, int taskId);
 
     Task getByTaskId(long TaskId) ;
 

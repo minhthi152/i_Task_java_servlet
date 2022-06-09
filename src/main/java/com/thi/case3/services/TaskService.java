@@ -117,16 +117,22 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public void changeStatus(int statusId, int taskId) {
+    public boolean changeStatus(int statusId, int taskId) {
+        boolean success = false;
+
         try{
             Connection connection = getConnection();
             CallableStatement statement = connection.prepareCall(UPDATE_STATUS_BY_ID);
             statement.setInt(1, statusId);
             statement.setInt(2, taskId);
             statement.execute();
+
+            success = true;
         } catch (SQLException e){
             printSQLException(e);
         }
+
+        return success;
     }
 
     @Override

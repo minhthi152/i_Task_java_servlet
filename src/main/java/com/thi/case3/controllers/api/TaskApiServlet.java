@@ -103,10 +103,23 @@ public class TaskApiServlet extends HttpServlet {
     }
 
     private void changeStatus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String json = null;
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
         int taskId = Integer.parseInt(req.getParameter("taskId"));
         int statusId = Integer.parseInt(req.getParameter("statusId"));
 
-        taskService.changeStatus(statusId, taskId);
+        boolean updated =  taskService.changeStatus(statusId, taskId);
+
+        if (updated) {
+            json = new Gson().toJson("success");
+        }
+        else {
+            json = new Gson().toJson("error");
+        }
+
+        resp.getWriter().write(json);
     }
 
     private void deleteTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

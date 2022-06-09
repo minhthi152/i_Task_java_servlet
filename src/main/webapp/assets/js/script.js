@@ -67,28 +67,28 @@ function dropLeavePending() {
     setTimeout(() => {
         console.log("dropLeavePending");
         updateTaskStatus(PENDING, taskId);
-    }, 500);
+    }, 100);
 }
 
 function dropLeaveProcessing() {
     setTimeout(() => {
         console.log("dropLeaveProcessing");
         updateTaskStatus(PROCESSING, taskId);
-    }, 500);
+    }, 100);
 }
 
 function dropLeaveReviewing() {
     setTimeout(() => {
         console.log("dropLeaveReviewing");
         updateTaskStatus(REVIEWING, taskId);
-    }, 500);
+    }, 100);
 }
 
 function dropLeaveCompleted() {
     setTimeout(() => {
         console.log("dropLeaveCompleted");
         updateTaskStatus(COMPLETED, taskId);
-    }, 500);
+    }, 100);
 }
 
 function dragOver(e) {

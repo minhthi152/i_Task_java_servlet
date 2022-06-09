@@ -5,6 +5,7 @@
 <html lang="en">
 <head>
     <%@ include file="/layout/headerLink.jsp"%>
+    <link rel="stylesheet" href="/assets/iziToast/iziToast-1.4.0.min.css">
 
     <title>Document</title>
 </head>
@@ -130,9 +131,9 @@
     </div>
 </div>
 
-
-<script src="/assets/script.js"></script>
+<script src="/assets/iziToast/iziToast-1.4.0.js"></script>
 <script src="/assets/js/axios.min.js"></script>
+<script src="/assets/js/script.js"></script>
 
 <script>
     let btnNewTask = document.getElementById("btn-new-task");
@@ -157,7 +158,12 @@
                 let data = response.data;
 
                 if (data === "error") {
-                    alert("The operation failed, please check the data again.");
+                    iziToast.error({
+                        title: 'OK',
+                        position: 'bottomRight',
+                        timeout: 1500,
+                        message: 'The operation failed, please check the data again.'
+                    });
                 }
                 else {
                     let str = `
@@ -182,6 +188,13 @@
 
                     handlerTask();
                     handlerColumn();
+
+                    iziToast.success({
+                        title: 'OK',
+                        position: 'bottomRight',
+                        timeout: 2500,
+                        message: 'Add task successful'
+                    });
                 }
             });
     }
@@ -191,6 +204,18 @@
             method: 'get',
             url: 'http://localhost:8089/api/i-task?action=change-status&statusId=' + statusId + '&taskId=' + taskId,
         })
+            .then(function (response) {
+                let data = response.data;
+
+                if (data === "success") {
+                    iziToast.success({
+                        title: 'OK',
+                        position: 'bottomRight',
+                        timeout: 1500,
+                        message: 'Update task successful'
+                    });
+                }
+            })
     }
 
     function deleteTask(taskId) {
@@ -203,6 +228,15 @@
 
             if (data === "success") {
                 document.getElementById("tr_" + taskId).remove();
+
+                if (data === "success") {
+                    iziToast.info({
+                        title: 'OK',
+                        position: 'bottomRight',
+                        timeout: 2500,
+                        message: 'Delete task successful'
+                    });
+                }
             }
         })
     }
