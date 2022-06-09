@@ -14,36 +14,44 @@ import javax.servlet.annotation.*;
 public class SignInServlet extends HttpServlet {
     IUserService userService = new UserService();
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/entrance/signIn.jsp");
-        try {
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+
+        RequestDispatcher dispatcher = null;
+
+        if (session.getAttribute("sessionUser") == null) {
+            dispatcher = request.getRequestDispatcher("/entrance/signIn.jsp");
             dispatcher.forward(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
         }
-
+        else {
+            response.sendRedirect("/i-Task");
+        }
     }
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    RequestDispatcher dispatcher;
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    User user = userService.signIn(username, password);
 
-    System.out.println(this.getClass() + " user: " + user);
-    if(user == null){
-        dispatcher = request.getRequestDispatcher("/entrance/signIn.jsp");
-        String message = "Invalid email/password";
-        request.setAttribute("message", message);
-        dispatcher.forward(request, response);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher;
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        User user = userService.signIn(username, password);
 
-    }else{
-//        dispatcher = request.getRequestDispatcher("/workSpace/main.jsp");
-//        dispatcher.forward(request, response);
-        response.sendRedirect("/i-Task");
+        System.out.println(this.getClass() + " user: " + user);
+        if (user == null) {
+            dispatcher = request.getRequestDispatcher("/entrance/signIn.jsp");
 
+            String message = "Invalid email/password";
+            request.setAttribute("message", message);
+
+            dispatcher.forward(request, response);
+
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("sessionUser", user);
+
+            response.sendRedirect("/i-Task");
+        }
     }
-}
 
 
 }

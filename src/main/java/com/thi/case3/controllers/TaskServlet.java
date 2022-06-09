@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,25 +23,36 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = req.getParameter("action");
-        if (action == null) {
-            action = "";
+        HttpSession session = req.getSession();
+
+        if (session.getAttribute("sessionUser") == null) {
+            resp.sendRedirect("/signIn");
         }
-        switch (action){
-            case "logOut":
-                showSignInPage(req,resp);
-                break;
-            case "delete":
-                deleteTask(req,resp);
-                break;
-            default:
-                showAll(req, resp);
-                break;
+        else {
+            String action = req.getParameter("action");
+
+            if (action == null) {
+                action = "";
+            }
+            switch (action){
+                case "logOut":
+                    showSignInPage(req,resp);
+                    break;
+                case "delete":
+                    deleteTask(req,resp);
+                    break;
+                default:
+                    showAll(req, resp);
+                    break;
+            }
         }
     }
 
     private void showSignInPage(HttpServletRequest req, HttpServletResponse resp) {
         try {
+            HttpSession session = req.getSession(false);
+            session.removeAttribute("sessionUser");
+
             resp.sendRedirect("/signIn");
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -128,8 +128,6 @@
         </div>
 
     </div>
-
-
 </div>
 
 
@@ -156,28 +154,35 @@
         })
             .then(function (response) {
 
-                let str = `
-                    <div id="tr_\${response.data.id}" class="task" draggable="true">
-                        <div class="sub-task">
-                            <div class = "title">\${response.data.taskName}</div>
-                            <div class="time"><i class="far fa-calendar-alt"></i>\${response.data.deadline}</div>
-                        </div>
-                        <div class="div-image" >
-                            <img class = "avatar" src="\${response.data.avatar}" alt="">
-                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                            <ul class="task-menu">
-                                <li><i class="fa fa-pencil"></i>Detail</li>
-                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                            </ul>
-                        </div>
-                    </div>
-                `;
+                let data = response.data;
 
-                let taskPending = document.getElementById('taskPending');
-                taskPending.insertAdjacentHTML('afterbegin', str);
+                if (data === "error") {
+                    alert("The operation failed, please check the data again.");
+                }
+                else {
+                    let str = `
+                        <div id="tr_\${response.data.id}" class="task" draggable="true">
+                            <div class="sub-task">
+                                <div class = "title">\${response.data.taskName}</div>
+                                <div class="time"><i class="far fa-calendar-alt"></i>\${response.data.deadline}</div>
+                            </div>
+                            <div class="div-image">
+                                <img class = "avatar" src="\${response.data.avatar}" alt="">
+                                <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                                <ul class="task-menu">
+                                    <li><i class="fa fa-pencil"></i>Detail</li>
+                                    <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
 
-                handlerTask();
-                handlerColumn();
+                    let taskPending = document.getElementById('taskPending');
+                    taskPending.insertAdjacentHTML('afterbegin', str);
+
+                    handlerTask();
+                    handlerColumn();
+                }
             });
     }
 
