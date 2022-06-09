@@ -36,12 +36,12 @@
     </div>
 
     <div class="kanban">
-        <div class="kanban_column kanban_column-pending">
+        <div class="kanban_column-pending">
             <div class="kanban_column-title">
                 <h4>PENDING</h4>
             </div>
             <button class="kanban_add-item" id="btn-add-task" type="button">+ Add</button>
-            <div id="taskPending">
+            <div id="taskPending" class="kanban_column">
                 <c:forEach var="item" items="${pendingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -61,71 +61,78 @@
             </div>
         </div>
 
-        <div id="taskProcessing" class="kanban_column kanban_column-processing">
+        <div class="kanban_column-processing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
-            <c:forEach var="item" items="${processingTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskProcessing" class="kanban_column">
+                <c:forEach var="item" items="${processingTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
 
 
-        <div id="taskReviewing" class="kanban_column kanban_column-reviewing">
+        <div class="kanban_column-reviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
-            <c:forEach var="item" items="${reviewingTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskReviewing" class="kanban_column">
+                <c:forEach var="item" items="${reviewingTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
 
-        <div id="taskCompleted" class="kanban_column kanban_column-completed">
+        <div class="kanban_column-completed">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
-            <c:forEach var="item" items="${completedTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskCompleted" class="kanban_column">
+                <c:forEach var="item" items="${completedTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i>Detail</li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
+
         </div>
 
     </div>
@@ -153,50 +160,52 @@
             url: 'http://localhost:8089/api/i-task?action=create',
             data: task
         })
-            .then(function (response) {
+        .then(function (response) {
 
-                let data = response.data;
+            let data = response.data;
 
-                if (data === "error") {
-                    iziToast.error({
-                        title: 'OK',
-                        position: 'bottomRight',
-                        timeout: 1500,
-                        message: 'The operation failed, please check the data again.'
-                    });
-                }
-                else {
-                    let str = `
-                        <div id="tr_\${response.data.id}" class="task" draggable="true">
-                            <div class="sub-task">
-                                <div class = "title">\${response.data.taskName}</div>
-                                <div class="time"><i class="far fa-calendar-alt"></i>\${response.data.deadline}</div>
-                            </div>
-                            <div class="div-image">
-                                <img class = "avatar" src="\${response.data.avatar}" alt="">
-                                <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                                <ul class="task-menu">
-                                    <li><i class="fa fa-pencil"></i>Detail</li>
-                                    <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                                </ul>
-                            </div>
+            if (data === "error") {
+                iziToast.error({
+                    title: 'OK',
+                    position: 'bottomRight',
+                    timeout: 1500,
+                    message: 'The operation failed, please check the data again.'
+                });
+            }
+            else {
+                let str = `
+                    <div id="tr_\${response.data.id}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">\${response.data.taskName}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>\${response.data.deadline}</div>
                         </div>
-                    `;
+                        <div class="div-image">
+                            <img class = "avatar" src="\${response.data.avatar}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i>Detail</li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
 
-                    let taskPending = document.getElementById('taskPending');
-                    taskPending.insertAdjacentHTML('afterbegin', str);
+                let taskPending = document.getElementById('taskPending');
+                taskPending.insertAdjacentHTML('afterbegin', str);
 
-                    handlerTask();
-                    handlerColumn();
+                handlerTask();
+                handlerColumn();
 
-                    iziToast.success({
-                        title: 'OK',
-                        position: 'bottomRight',
-                        timeout: 2500,
-                        message: 'Add task successful'
-                    });
-                }
-            });
+                handlerDelete();
+
+                iziToast.success({
+                    title: 'OK',
+                    position: 'bottomRight',
+                    timeout: 2500,
+                    message: 'Add task successful'
+                });
+            }
+        });
     }
 
     function updateTaskStatus(statusId, taskId) {

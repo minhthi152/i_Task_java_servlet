@@ -1,4 +1,4 @@
-<div class="row" id="header">
+<div class="" id="header">
     <div class="mb-3 col-md-3">
         <div class="row">
             <div class="col-sm-8">
@@ -58,7 +58,7 @@
             </div>
             <div class="col-sm-8">
                 <button type="button" class="btn btn-success">
-                    <a href="/i-Task?action=logOut">
+                    <a class="btn-logout" href="/i-Task?action=logOut">
                         <i class="fa-solid fa-right-from-bracket"></i> Log out
                     </a>
                 </button>

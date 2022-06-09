@@ -10,6 +10,8 @@ const REVIEWING = 3;
 const COMPLETED = 4;
 
 let taskId = 0;
+let currentColumn = null;
+let targetColumn = null;
 
 function handlerTask() {
     const tasks = document.querySelectorAll(".task");
@@ -20,18 +22,21 @@ function handlerTask() {
     });
 }
 
-function dragStart() {
+function dragStart(e) {
     draggableTask = this;
-  setTimeout(() => {
-    this.style.display = "none";
-  }, 0);
-  // console.log("dragStart");
+    taskId = e.target.id.replace("tr_", "");
+    currentColumn = e.target.parentElement.id;
+
+    setTimeout(() => {
+        this.style.display = "none";
+    }, 0);
+    // console.log("dragStart");
+
 }
 
 function dragEnd(e) {
     draggableTask = null;
-
-    taskId = e.target.id.replace("tr_", "");
+    targetColumn = e.target.parentElement.id;
 
     setTimeout(() => {
         this.style.display = "flex";
@@ -66,65 +71,73 @@ function handlerColumn() {
 function dropLeavePending() {
     setTimeout(() => {
         console.log("dropLeavePending");
-        updateTaskStatus(PENDING, taskId);
+        if (currentColumn !== targetColumn) {
+            updateTaskStatus(PENDING, taskId);
+        }
     }, 100);
 }
 
 function dropLeaveProcessing() {
     setTimeout(() => {
         console.log("dropLeaveProcessing");
-        updateTaskStatus(PROCESSING, taskId);
+        if (currentColumn !== targetColumn) {
+            updateTaskStatus(PROCESSING, taskId);
+        }
     }, 100);
 }
 
 function dropLeaveReviewing() {
     setTimeout(() => {
         console.log("dropLeaveReviewing");
-        updateTaskStatus(REVIEWING, taskId);
+        if (currentColumn !== targetColumn) {
+            updateTaskStatus(REVIEWING, taskId);
+        }
     }, 100);
 }
 
 function dropLeaveCompleted() {
     setTimeout(() => {
         console.log("dropLeaveCompleted");
-        updateTaskStatus(COMPLETED, taskId);
+        if (currentColumn !== targetColumn) {
+            updateTaskStatus(COMPLETED, taskId);
+        }
     }, 100);
 }
 
 function dragOver(e) {
-  e.preventDefault();
-  //   console.log("dragOver");
+    e.preventDefault();
+    //   console.log("dragOver");
 }
 
 function dragEnter() {
-  this.style.border = "2px dashed #ccc";
-  // console.log("dragEnter");
+    this.style.border = "2px dashed #ccc";
+    // console.log("dragEnter");
 }
 
 function dragLeave() {
-  this.style.border = "none";
-  // console.log("dragLeave");
+    this.style.border = "none";
+    // console.log("dragLeave");
 }
 
 function dragDrop() {
-  this.style.border = "none";
-  this.appendChild(draggableTask);
-  // console.log("dropped");
+    this.style.border = "none";
+    this.appendChild(draggableTask);
+    // console.log("dropped");
 }
 
- /* end  for drag and drop */
+/* end  for drag and drop */
 
 
- //show task menu
- function showMenu(selectedTask){
-      let taskMenu = selectedTask.parentElement.lastElementChild;
-      taskMenu.classList.add("show");
-      document.addEventListener("click", e => {
-          if(e.target != selectedTask){ 
-              taskMenu.classList.remove("show");
-          }
-      })
-  }
+//show task menu
+function showMenu(selectedTask) {
+    let taskMenu = selectedTask.parentElement.lastElementChild;
+    taskMenu.classList.add("show");
+    document.addEventListener("click", e => {
+        if (e.target != selectedTask) {
+            taskMenu.classList.remove("show");
+        }
+    })
+}
 
 
 //---------js pop up create task--------------
@@ -138,17 +151,17 @@ var btn = document.getElementById("btn-add-task");
 var span = document.getElementsByClassName("close-btn")[0];
 
 // When the user clicks the button, open the popUp
-btn.onclick = function() {
+btn.onclick = function () {
     popUp.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the popUp
-span.onclick = function() {
+span.onclick = function () {
     popUp.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the popUp, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == popUp) {
         popUp.style.display = "none";
     }
