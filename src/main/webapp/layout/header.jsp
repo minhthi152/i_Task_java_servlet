@@ -4,7 +4,7 @@
             <div class="col-sm-8">
 
                 <button type="button" class="btn btn-success">
-                    <a style="font-size: 20px; color:#fff;font-weight:700;" href="/i-Task">
+                    <a class="btn-home" style="font-size: 20px; color:#fff;font-weight:700; text-decoration: none" href="/i-Task">
                         <i class="fa-solid fa-house" style="padding-left: 20px; font-size: 30px; color: #fff;"></i>   i-Task!
                     </a>
                 </button>
@@ -42,7 +42,7 @@
 
         <div class="col-sm-12">
             <button type="button" class="btn btn-success">
-                <a href="/i-Task?action=user-info">
+                <a class="btn-info" style="text-decoration: none; color: #fff" href="/i-Task?action=user-info">
                     <i class="fa-solid fa-user"></i> Your Info
                 </a>
             </button>

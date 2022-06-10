@@ -1,10 +1,11 @@
 package com.thi.case3.controllers;
 
+import com.thi.case3.dto.PerformerDTO;
 import com.thi.case3.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
-import com.thi.case3.services.ITaskService;
-import com.thi.case3.services.TaskService;
+import com.thi.case3.models.User;
+import com.thi.case3.services.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +21,9 @@ import java.util.List;
 @WebServlet(name = "TaskServlet", urlPatterns = "/i-Task")
 public class TaskServlet extends HttpServlet {
     ITaskService taskService = new TaskService();
+    IUserService userService = new UserService();
+
+    PerformerService performerService = new PerformerService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -97,6 +101,12 @@ public class TaskServlet extends HttpServlet {
         long taskId = Long.parseLong(req.getParameter("id"));
         TaskDTO taskDTO = taskService.getDetailsByTaskId(taskId);
         req.setAttribute("task", taskDTO);
+        List<User> users = userService.getUsers();
+        req.setAttribute("users", users);
+        List<PerformerDTO> performerDTOs = performerService.getAllPerformersOfTask(taskId);
+        req.setAttribute("performerDTOs", performerDTOs);
+
+
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {

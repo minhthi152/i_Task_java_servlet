@@ -1,28 +1,25 @@
-package com.thi.case3.models;
+package com.thi.case3.dto;
 
-public class Performer {
+import com.thi.case3.models.PermissionType;
+
+public class PerformerDTO {
     private int id;
     private int userId;
     private long taskId;
-    private String fullName;
     private PermissionType permissionId;
+    private String fullName;
+    private String avatar;
 
-
-    public Performer() {
+    public PerformerDTO() {
     }
 
-    public Performer(int userId, long taskId, PermissionType permissionId) {
-        this.userId = userId;
-        this.taskId = taskId;
-        this.permissionId = permissionId;
-    }
-
-    public Performer(int id, int userId, long taskId, String fullName, PermissionType permissionId) {
+    public PerformerDTO(int id, int userId, long taskId, PermissionType permissionId, String fullName, String avatar) {
         this.id = id;
         this.userId = userId;
         this.taskId = taskId;
-        this.fullName = fullName;
         this.permissionId = permissionId;
+        this.fullName = fullName;
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -49,14 +46,6 @@ public class Performer {
         this.taskId = taskId;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public PermissionType getPermissionId() {
         return permissionId;
     }
@@ -65,4 +54,19 @@ public class Performer {
         this.permissionId = permissionId;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

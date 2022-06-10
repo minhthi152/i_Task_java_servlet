@@ -61,74 +61,80 @@
             </div>
         </div>
 
-        <div id="taskProcessing" class="kanban_column kanban_column-processing">
+        <div class="kanban_column kanban_column-processing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
-            <c:forEach var="item" items="${processingTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskProcessing">
+                <c:forEach var="item" items="${processingTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
 
 
-        <div id="taskReviewing" class="kanban_column kanban_column-reviewing">
+        <div  class="kanban_column kanban_column-reviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
-            <c:forEach var="item" items="${reviewingTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskReviewing">
+                <c:forEach var="item" items="${reviewingTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=${item.getId()}">Detail</a></li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
 
-        <div id="taskCompleted" class="kanban_column kanban_column-completed">
+        <div class="kanban_column kanban_column-completed">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
-            <c:forEach var="item" items="${completedTasks}">
-                <div id="tr_${item.getId()}" class="task" draggable="true">
-                    <div class="sub-task">
-                        <div class = "title">${item.getTaskName()}</div>
-                        <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+            <div id="taskCompleted">
+                <c:forEach var="item" items="${completedTasks}">
+                    <div id="tr_${item.getId()}" class="task" draggable="true">
+                        <div class="sub-task">
+                            <div class = "title">${item.getTaskName()}</div>
+                            <div class="time"><i class="far fa-calendar-alt"></i>${item.getDeadline()}</div>
+                        </div>
+                        <div class="div-image" >
+                            <img class = "avatar" src="${item.getAvatar()}" alt="">
+                            <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
+                            <ul class="task-menu">
+                                <li>
+                                    <i class="fa fa-pencil"></i>
+                                    <a href="/i-Task?action=detail&id=${item.getId()}">Detail</a>
+                                </li>
+                                <li class="delete"><i class="fa fa-remove"></i>Delete</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="div-image" >
-                        <img class = "avatar" src="${item.getAvatar()}" alt="">
-                        <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
-                        <ul class="task-menu">
-                            <li>
-                                <i class="fa fa-pencil"></i>
-                                <a href="/i-Task?action=detail&id=${item.getId()}">Detail</a>
-                            </li>
-                            <li class="delete"><i class="fa fa-remove"></i>Delete</li>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
 
     </div>
@@ -277,7 +283,6 @@
 
                 handlerTask();
                 handlerColumn();
-
                 handlerDelete();
             });
     }

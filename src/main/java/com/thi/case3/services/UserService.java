@@ -2,9 +2,11 @@ package com.thi.case3.services;
 
 import com.thi.case3.models.Role;
 import com.thi.case3.models.User;
+import com.thi.case3.utils.MySQLConnection;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.thi.case3.utils.MySQLConnection.getConnection;
@@ -27,9 +29,48 @@ public class UserService implements IUserService{
             "AND u.password_ = ?;";
 
 
+    private static final String GET_ALL_USERS = "" +
+            "SELECT " +
+            "u.id, " +
+            "u.fullName, " +
+            "u.email, " +
+            "u.phone, " +
+            "u.username, " +
+            "u.password_, " +
+            "u.role_id, " +
+            "u.avatar " +
+            "FROM i_task.users AS u;";
+
     @Override
     public List<User> getUsers() {
-        return null;
+        List<User> users = new ArrayList<>();
+
+        try {
+            Connection connection = MySQLConnection.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String fullName = rs.getString("fullName");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                String userName = rs.getString("username");
+                String password = rs.getString("password_");
+                int role_id = rs.getInt("role_id");
+                String avatar = rs.getString("avatar");
+
+
+                users.add(new User(id, fullName, email,phone,userName, password, role_id, avatar));
+            }
+
+        } catch (SQLException e) {
+            MySQLConnection.printSQLException(e);
+        }
+
+        return users;
+
     }
 
     @Override

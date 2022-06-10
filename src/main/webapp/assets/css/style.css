@@ -18,12 +18,12 @@ body{
     flex-wrap: wrap;
 }
 
-a.btn-logout {
+a.btn-logout, a.btn-info, a.btn-home {
     color: #fff;
     text-decoration: none;
 }
 
-a.btn-logout:hover {
+a.btn-logout:hover, a.btn-info:hover {
     color: #f4c400;
 }
 
@@ -202,7 +202,8 @@ a.btn-logout:hover {
 }
 .task-menu li{
     list-style-type: none;
-}
+    text-decoration: none;
+    color: #212529}
 .task-menu.show{
     transform: scale(1);
 }
