@@ -10,6 +10,8 @@ const REVIEWING = 3;
 const COMPLETED = 4;
 
 let taskId = 0;
+let currentColumn = null;
+let targetColumn = null;
 
 function handlerTask() {
     const tasks = document.querySelectorAll(".task");
@@ -20,24 +22,26 @@ function handlerTask() {
     });
 }
 
-function dragStart() {
+function dragStart(e) {
     draggableTask = this;
+    currentColumn = e.target.parentElement.id;
   setTimeout(() => {
     this.style.display = "none";
   }, 0);
-  // console.log("dragStart");
+  console.log("dragStart");
 }
 
 function dragEnd(e) {
     draggableTask = null;
 
     taskId = e.target.id.replace("tr_", "");
+    targetColumn = e.target.parentElement.id;
 
     setTimeout(() => {
         this.style.display = "flex";
     }, 0);
 
-    // console.log("dragEnd");
+    console.log("dragEnd");
 }
 
 function handlerColumn() {
@@ -66,28 +70,39 @@ function handlerColumn() {
 function dropLeavePending() {
     setTimeout(() => {
         console.log("dropLeavePending");
-        updateTaskStatus(PENDING, taskId);
+        if(currentColumn !== targetColumn){
+            updateTaskStatus(PENDING, taskId);
+        }
+
     }, 100);
 }
 
 function dropLeaveProcessing() {
     setTimeout(() => {
         console.log("dropLeaveProcessing");
-        updateTaskStatus(PROCESSING, taskId);
+        if(currentColumn !== targetColumn){
+            updateTaskStatus(PROCESSING, taskId);
+        }
+
     }, 100);
 }
 
 function dropLeaveReviewing() {
     setTimeout(() => {
         console.log("dropLeaveReviewing");
-        updateTaskStatus(REVIEWING, taskId);
+        if(currentColumn !== targetColumn){
+            updateTaskStatus(REVIEWING, taskId);
+        }
+
     }, 100);
 }
 
 function dropLeaveCompleted() {
     setTimeout(() => {
         console.log("dropLeaveCompleted");
-        updateTaskStatus(COMPLETED, taskId);
+        if(currentColumn !== targetColumn) {
+            updateTaskStatus(COMPLETED, taskId);
+        }
     }, 100);
 }
 

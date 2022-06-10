@@ -1,4 +1,4 @@
-package com.thi.case3.controllers.dto;
+package com.thi.case3.dto;
 
 import com.thi.case3.models.Performer;
 import com.thi.case3.models.Status;

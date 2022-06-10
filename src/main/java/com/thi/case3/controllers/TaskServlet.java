@@ -1,7 +1,6 @@
 package com.thi.case3.controllers;
 
-import com.google.gson.JsonObject;
-import com.thi.case3.controllers.dto.TaskDTO;
+import com.thi.case3.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
 import com.thi.case3.services.ITaskService;

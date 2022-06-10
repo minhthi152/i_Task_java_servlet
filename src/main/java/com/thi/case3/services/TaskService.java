@@ -1,12 +1,9 @@
 package com.thi.case3.services;
 
-import com.thi.case3.controllers.dto.TaskDTO;
-import com.thi.case3.models.Performer;
+import com.thi.case3.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
-import com.thi.case3.models.User;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
