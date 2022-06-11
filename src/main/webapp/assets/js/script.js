@@ -45,6 +45,7 @@ function dragEnd(e) {
 }
 
 function handlerColumn() {
+    console.log("handlerColumn");
     const columns = document.querySelectorAll(".kanban_column");
 
     columns.forEach((column) => {
@@ -170,3 +171,8 @@ window.onclick = function(event) {
 }
 
 // ---------end js for pop up-------
+
+
+
+//-------------js pop up update task
+

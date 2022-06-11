@@ -13,7 +13,7 @@
 <body>
 <%@ include file="/layout/header.jsp" %>
 
-<div class="container" style="background-color: #fff;">
+<div class="container" style="background-color: #fff;margin-top: 90px">
     <table class="table table-hover">
         <thead>
         <tr>
@@ -27,12 +27,12 @@
         </thead>
         <tbody>
         <tr>
-            <th>ID </th>
-            <th>Fullname</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Email</th>
-            <th>Phone number</th>
+            <th>${user.getId()} </th>
+            <th>${user.getFullName()}</th>
+            <th>${user.getUserName()}</th>
+            <th>${user.getRole_id()}</th>
+            <th>${user.getEmail()}</th>
+            <th>${user.getPhoneNumber()}</th>
         </tr>
         </tbody>
     </table>

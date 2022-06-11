@@ -14,7 +14,7 @@ import static com.thi.case3.utils.MySQLConnection.printSQLException;
 
 public class UserService implements IUserService{
 
-    private static final String GET_USER_BY_ID = "" +
+    private static final String GET_USER_BY_USERNAME_AND_PWD = "" +
             "SELECT " +
             "u.id, " +
             "u.fullname, " +
@@ -40,6 +40,18 @@ public class UserService implements IUserService{
             "u.role_id, " +
             "u.avatar " +
             "FROM i_task.users AS u;";
+    
+    private static final String GET_USER_BY_ID = "" + 
+            "SELECT  " +
+            "id, " +
+            "fullName, " +
+            "email,  " +
+            "phone,  " +
+            "username, " +
+            "role_id, " +
+            "avatar " +
+            "FROM users  " +
+            "WHERE id = ?";
 
     @Override
     public List<User> getUsers() {
@@ -79,7 +91,7 @@ public class UserService implements IUserService{
         try {
             Connection connection = getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_USERNAME_AND_PWD);
 
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, password);
@@ -137,7 +149,30 @@ public class UserService implements IUserService{
 
     @Override
     public User getUserById(int id) {
-        return null;
+        User user =null;
+        try(
+                Connection connection = MySQLConnection.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID);
+                ){
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+
+                String fullName = rs.getString("fullName");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                String username = rs.getString("username");
+                int role_id = rs.getInt("role_id");
+                String avatar = rs.getString("avatar");
+
+              user = new User(id,fullName, email, phone, username, role_id, avatar );
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 
 

@@ -12,7 +12,7 @@
 <body>
 <%@ include file="/layout/header.jsp"%>
 
-<div id = "workspace">
+<div id = "workspace" style="margin-top: 70px">
     <div id="create-task-div">
 
         <div style="height: 20px">
@@ -36,12 +36,12 @@
     </div>
 
     <div class="kanban">
-        <div class="kanban_column kanban_column-pending">
+        <div class="kanban_column kanban_column-pending" id="taskPending" >
             <div class="kanban_column-title">
                 <h4>PENDING</h4>
             </div>
             <button class="kanban_add-item" id="btn-add-task" type="button">+ Add</button>
-            <div id="taskPending">
+            <div id="taskCreated">
                 <c:forEach var="item" items="${pendingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -61,11 +61,11 @@
             </div>
         </div>
 
-        <div class="kanban_column kanban_column-processing">
+        <div class="kanban_column kanban_column-processing" id="taskProcessing">
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
-            <div id="taskProcessing">
+            <div >
                 <c:forEach var="item" items="${processingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -86,11 +86,11 @@
         </div>
 
 
-        <div  class="kanban_column kanban_column-reviewing">
+        <div  class="kanban_column kanban_column-reviewing" id="taskReviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
-            <div id="taskReviewing">
+            <div >
                 <c:forEach var="item" items="${reviewingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -110,11 +110,11 @@
             </div>
         </div>
 
-        <div class="kanban_column kanban_column-completed">
+        <div class="kanban_column kanban_column-completed" id="taskCompleted">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
-            <div id="taskCompleted">
+            <div >
                 <c:forEach var="item" items="${completedTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -277,8 +277,8 @@
                         </div>
                     `;
 
-                    let taskPending = document.getElementById('taskPending');
-                    taskPending.insertAdjacentHTML('afterbegin', str);
+                    let taskCreated = document.getElementById('taskCreated');
+                    taskCreated.insertAdjacentHTML('afterbegin', str);
                 });
 
                 handlerTask();

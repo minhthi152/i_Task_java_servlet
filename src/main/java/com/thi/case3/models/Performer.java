@@ -65,4 +65,14 @@ public class Performer {
         this.permissionId = permissionId;
     }
 
+    @Override
+    public String toString() {
+        return "Performer{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", taskId=" + taskId +
+                ", fullName='" + fullName + '\'' +
+                ", permissionId=" + permissionId +
+                '}';
+    }
 }

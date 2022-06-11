@@ -244,3 +244,27 @@ a.btn-logout:hover, a.btn-info:hover {
     color: #0d6efd;
 
 }
+
+#update-task-div{
+    align-items: center;
+    position: fixed;
+    padding: 10px 30px;
+    width:400px;
+    background-color: #7ce5e5;
+    top: 300px;
+    right: 530px;
+    border-radius: 4px;
+    z-index: 50;
+    display: none;
+}
+
+
+
+#update-new-task, #update-new-deadline{
+    width: 220px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+#btn-update-task{
+    margin-top: 10px;
+}

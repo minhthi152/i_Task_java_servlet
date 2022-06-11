@@ -13,6 +13,7 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "SignInServlet", value = "/signIn")
 public class SignInServlet extends HttpServlet {
     IUserService userService = new UserService();
+    public static User user;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -34,7 +35,7 @@ public class SignInServlet extends HttpServlet {
         RequestDispatcher dispatcher;
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User user = userService.signIn(username, password);
+        user = userService.signIn(username, password);
 
         System.out.println(this.getClass() + " user: " + user);
         if (user == null) {

@@ -1,4 +1,4 @@
-<div class="" id="header">
+<div class="" id="header" style="position: fixed; top: 0; width: 100%; z-index: 1000000000">
     <div class="mb-3 col-md-3">
         <div class="row">
             <div class="col-sm-8">
@@ -53,7 +53,7 @@
         <div class="row" style="padding-right:20px;">
             <div class="col-sm-4">
                 <div class="div-image" >
-                    <img class = "avatar" src="/assets/image/thi.jpg" alt="">
+                    <img class = "avatar" src="${user.getAvatar()}" alt="">
                 </div>
             </div>
             <div class="col-sm-8">

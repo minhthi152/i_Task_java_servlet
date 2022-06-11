@@ -55,7 +55,49 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
 
+        if (action == null) {
+            action = "";
+        }
+        switch (action){
+            case "detail":
+                editTask(req,resp);
+                break;
+        }
+    }
+
+    private void editTask(HttpServletRequest req, HttpServletResponse resp) {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/userInfo.jsp");
+        User user = SignInServlet.user;
+        req.setAttribute("user", user);
+
+        String newTaskName = req.getParameter("newTaskName");
+        String deadline = req.getParameter("newDeadline");
+
+
+
+
+        long taskId = Long.parseLong(req.getParameter("id"));
+        TaskDTO taskDTO = taskService.getDetailsByTaskId(taskId);
+        req.setAttribute("task", taskDTO);
+        List<User> users = userService.getUsers();
+        req.setAttribute("users", users);
+        List<PerformerDTO> performerDTOs = performerService.getAllPerformersOfTask(taskId);
+        req.setAttribute("performerDTOs", performerDTOs);
+
+
+
+
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     private void showSignInPage(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -70,10 +112,12 @@ public class TaskServlet extends HttpServlet {
 
     private void showAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/main.jsp");
+        User user = SignInServlet.user;
+        req.setAttribute("user", user);
 
-//        List<Task> pendingTasks = taskService.getTasksByStatus(Status.PENDING);
-//        System.out.println(pendingTasks);
-//        req.setAttribute("pendingTasks", pendingTasks);
+        List<Task> pendingTasks = taskService.getTasksByStatus(Status.PENDING);
+        System.out.println(pendingTasks);
+        req.setAttribute("pendingTasks", pendingTasks);
 
         List<Task> processingTasks = taskService.getTasksByStatus(Status.PROCESSING);
         req.setAttribute("processingTasks", processingTasks);
@@ -90,6 +134,8 @@ public class TaskServlet extends HttpServlet {
 
     private void showUserInfoPage(HttpServletRequest req, HttpServletResponse resp) {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/userInfo.jsp");
+        User user = SignInServlet.user;
+        req.setAttribute("user", user);
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {
@@ -98,6 +144,10 @@ public class TaskServlet extends HttpServlet {
     }
     private void showDetailPage(HttpServletRequest req, HttpServletResponse resp) {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/workSpace/detail.jsp");
+
+        User user = SignInServlet.user;
+        req.setAttribute("user", user);
+
         long taskId = Long.parseLong(req.getParameter("id"));
         TaskDTO taskDTO = taskService.getDetailsByTaskId(taskId);
         req.setAttribute("task", taskDTO);
