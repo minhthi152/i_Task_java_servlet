@@ -103,7 +103,7 @@ a.btn-logout:hover, a.btn-info:hover {
 
 
 
-.kanban_column:not(:last-child) {
+.kanban_column_div:not(:last-child) {
     margin-right: 30px;
 }
 

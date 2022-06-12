@@ -36,12 +36,12 @@
     </div>
 
     <div class="kanban">
-        <div class="kanban_column kanban_column-pending" id="taskPending" >
+        <div class="kanban_column_div kanban_column-pending" >
             <div class="kanban_column-title">
                 <h4>PENDING</h4>
             </div>
             <button class="kanban_add-item" id="btn-add-task" type="button">+ Add</button>
-            <div id="taskCreated">
+            <div  id="taskPending" class="kanban_column">
                 <c:forEach var="item" items="${pendingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -61,11 +61,11 @@
             </div>
         </div>
 
-        <div class="kanban_column kanban_column-processing" id="taskProcessing">
+        <div class= "kanban_column_div kanban_column-processing" >
             <div class="kanban_column-title">
                 <h4>PROCESSING</h4>
             </div>
-            <div >
+            <div id="taskProcessing" class="kanban_column">
                 <c:forEach var="item" items="${processingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -86,11 +86,11 @@
         </div>
 
 
-        <div  class="kanban_column kanban_column-reviewing" id="taskReviewing">
+        <div  class="kanban_column_div kanban_column-reviewing">
             <div class="kanban_column-title">
                 <h4>REVIEWING</h4>
             </div>
-            <div >
+            <div id="taskReviewing" class="kanban_column">
                 <c:forEach var="item" items="${reviewingTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -110,11 +110,11 @@
             </div>
         </div>
 
-        <div class="kanban_column kanban_column-completed" id="taskCompleted">
+        <div class="kanban_column_div kanban_column-completed">
             <div class="kanban_column-title">
                 <h4>COMPLETED</h4>
             </div>
-            <div >
+            <div id="taskCompleted" class="kanban_column">
                 <c:forEach var="item" items="${completedTasks}">
                     <div id="tr_${item.getId()}" class="task" draggable="true">
                         <div class="sub-task">
@@ -270,15 +270,15 @@
                                 <img class = "avatar" src="\${item.avatar}" alt="">
                                 <i class="fa-solid fa-gear" onclick="showMenu(this)"></i>
                                 <ul class="task-menu">
-                                    <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail">Detail</a></li>
+                                    <li><i class="fa fa-pencil"></i><a href="/i-Task?action=detail&id=\${item.id}">Detail</a></li>
                                     <li class="delete"><i class="fa fa-remove"></i>Delete</li>
                                 </ul>
                             </div>
                         </div>
                     `;
 
-                    let taskCreated = document.getElementById('taskCreated');
-                    taskCreated.insertAdjacentHTML('afterbegin', str);
+                    let taskPending = document.getElementById('taskPending');
+                    taskPending.insertAdjacentHTML('afterbegin', str);
                 });
 
                 handlerTask();
@@ -301,6 +301,52 @@
     window.onload = function() {
         getAllTasks();
     }
+
+
+
+
+        let btnSearch = document.getElementById("btn-search");
+        btnSearch.addEventListener("click", function (e) {
+                let word = document.getElementById("search-box").value;
+                console.log(word);
+               searchTasks(word);
+            })
+
+
+    function searchTasks(word){
+            console.log("searchTasks");
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/api/i-task?action=searchTasks&word='+word,
+        })
+            .then(function (response) {
+                let taskArr = [];
+                taskArr = response.data;
+
+               let allTasks = document.querySelectorAll(".task");
+               allTasks.forEach(item =>{
+                   item.style.background = "white";
+
+               });
+
+                taskArr.forEach(item => {
+                    console.log(item);
+                    let taskSearchedID = item.id;
+                    console.log(taskSearchedID);
+                    let taskSearched = document.getElementById("tr_" + taskSearchedID);
+                    console.log(taskSearched);
+                    taskSearched.style.background = "#a55eea";
+
+                });
+
+                handlerTask();
+                handlerColumn();
+                handlerDelete();
+            });
+    }
+
+
+
 </script>
 
 </body>

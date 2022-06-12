@@ -23,11 +23,11 @@
             <table>
                 <tr>
                     <td><label>Task name</label></td>
-                    <td><input type="text" spellcheck="false" id="update-new-task" name="newTaskName"></td>
+                    <td><input type="text" spellcheck="false"  name="newTaskName"></td>
                 </tr>
                 <tr>
                     <td><label>Deadline</label></td>
-                    <td><input type="date" spellcheck="false" id="update-new-deadline" name="newDeadline"></td>
+                    <td><input type="date" spellcheck="false"  name="newDeadline"></td>
                 </tr>
                 <tr>
                     <td><label>Status</label></td>
@@ -63,7 +63,7 @@
                 <div class="col-sm-2">
                     <h3 name="task-id" id="task-id">${task.getId()}</h3>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" id="task-name-div">
                     <h3 name="task-name">${task.getTaskName()}</h3>
                 </div>
                 <div class="col-sm-7">
@@ -84,16 +84,16 @@
             <tbody>
             <tr>
                 <td>${task.getCreateDate()}</td>
-                <td>${task.getDeadline()}</td>
+                <td id="deadline-td">${task.getDeadline()}</td>
                 <td>${task.getCreatorFullName()}</td>
                 <td>${task.getStatusName()}</td>
                 <td>
                     <div id="performersList">
 
                         <c:forEach items='${requestScope["performerDTOs"]}' var="item">
-                            <div class="div-image" style="display:inline-block;position: relative;">
+                            <div class="div-image" id="performer-img-${item.getId()}" style="display:inline-block;position: relative;" >
                                 <img class="avatar" src="${item.getAvatar()}" alt="">
-                                <div class="iconAvatar"><i class="fa-solid fa-circle-minus"></i></div>
+                                <div class="iconAvatar"><i id="btn-remove-performer${item.getId()}" class="fa-solid fa-circle-minus"></i></div>
                             </div>
                         </c:forEach>
 
@@ -104,12 +104,12 @@
                 <td>
                     <div class="row">
                         <div class="col-sm-2">
-                            <button id="open-update-form-btn" class="btn btn-outline-primary" type="button">
+                            <button id="edit-task-btn" class="btn btn-outline-primary" type="button">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <%--                            <a id="open-update-form" class="btn btn-outline-primary" title="" data-toggle="tooltip" href="./update.html" data-bs-original-title="Edit">--%>
-
-                            <%--                            </a>--%>
+                            <button id="save-task-btn" class="btn btn-outline-primary" type="button" style="display: none">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                            </button>
                         </div>
                         </form action="#">
                         <div class="col-sm-8">
@@ -179,8 +179,8 @@
 
 
 <script>
+<%--    Add performer to task--%>
     let btnAddPerformer = document.getElementById("btn-addPerformer");
-
     btnAddPerformer.addEventListener("click", function () {
         let taskId = document.getElementById("task-id").textContent;
         var selectedUser = document.getElementById('user_id');
@@ -207,16 +207,28 @@
         })
             .then(function (response) {
                 console.log(response)
-                let data = response.data;
+                let performerDTO = response.data;
                 let str = `
-                        <div class="div-image" style="display:inline-block;position: relative;">
-                                <img class = "avatar" src="\${response.data.avatar}" alt="">
-                                <div class="iconAvatar"><i class="fa-solid fa-circle-minus"></i></div>
+                        <div class="div-image" id="performer-img-\${performerDTO.id}" style="display:inline-block;position: relative;">
+                                <img class = "avatar" src="\${performerDTO.avatar}" alt="">
+                                <div class="iconAvatar" ><i class="fa-solid fa-circle-minus"></i></div>
                         </div>
                     `;
 
+                let pId = `#performer-img-\${performerDTO.id} > `;
                 let performersList = document.getElementById('performersList');
                 performersList.insertAdjacentHTML('afterbegin', str);
+                // #performer-img-90 > .iconAvatar
+                let btnDeleter = document.querySelector(pId + ".iconAvatar");
+                console.log(btnDeleter);
+
+                btnDeleter.addEventListener("click", function (e){
+                    let id = e.target.parentElement.parentElement.id.replace("performer-img-", "");
+                    console.log(id);
+                    removePerformerFromTask(id);
+
+                })
+
 
                 iziToast.success({
                     title: 'OK',
@@ -229,34 +241,188 @@
             })
             .catch((error) => {
                 iziToast.error({
-                    title: 'OK',
+                    title: 'Error',
                     position: 'bottomRight',
                     timeout: 1500,
                     message: error.response.data
                 });
             });
+
+
     }
 
+    //Delete a performer from a task
+    function handleDeleting(){
+        let deleteTaskBtn = document.querySelectorAll(".iconAvatar");
+        console.log(deleteTaskBtn);
+        deleteTaskBtn.forEach(item => {
+            item.addEventListener("click", function (e){
+                console.log(e);
 
-    var updateForm = document.getElementById("update-task-div");
+                console.log(e.target.parentElement.parentElement.id);
+                let id = e.target.parentElement.parentElement.id.replace("performer-img-", "");
+                console.log(id);
+                removePerformerFromTask(id);
+            })
+        })
 
-    var openUpdateBtn = document.getElementById("open-update-form-btn");
-
-    var spanClose = document.getElementsByClassName("close-update-btn")[0];
-
-    openUpdateBtn.onclick = function () {
-        updateForm.style.display = "block";
     }
 
-    spanClose.onclick = function () {
-        updateForm.style.display = "none";
-    }
+     function removePerformerFromTask(id){
+         axios({
+             method: 'delete',
+             url: 'http://localhost:8080//api/performer?action=removePerformerFromTask&id=' + id,
+         })
+             .then(function (response) {
+                 let data = response.data;
 
-    window.onclick = function (event) {
-        if (event.target == updateForm) {
-            updateForm.style.display = "none";
-        }
+                 if (data === "success") {
+                     document.getElementById("performer-img-" + id).remove();
+                     if (data === "success") {
+                         iziToast.info({
+                             title: 'OK',
+                             position: 'bottomRight',
+                             timeout: 2500,
+                             message: 'Remove performer out of task successfully'
+                         });
+                     }
+                 }
+             })
+     }
+
+
+    //----------edit and save task------------
+    let editTaskBtn = document.getElementById("edit-task-btn");
+    editTaskBtn.addEventListener("click", function (){
+        editDetailTask();
+    })
+
+function editDetailTask() {
+        console.log("editDetailTask");
+    document.getElementById("edit-task-btn").style.display="none";
+    document.getElementById("save-task-btn").style.display="block";
+
+    var taskName = document.getElementById("task-name-div");
+    var deadline = document.getElementById("deadline-td");
+
+    var taskNameData = taskName.innerText;
+    var deadlineData = deadline.innerText;
+
+    taskName.innerHTML="<input type='text' id='name_text' value='"+taskNameData+"'>";
+    deadline.innerHTML="<input type='text' id='name_text' value='"+deadlineData+"'>";
+}
+
+let saveTaskBtn = document.getElementById("save-task-btn");
+saveTaskBtn.addEventListener("click", function (){
+    saveTask();
+})
+
+function saveTask(){
+
+    let taskId = document.getElementById("task-id").innerText;
+    var newTaskName = document.getElementById("task-name-div");
+    var newDeadline = document.getElementById("deadline-td");
+
+    var newTaskNameData = newTaskName.firstChild.value;
+    var newDeadlineData = newDeadline.firstChild.value;
+    let task = {
+        taskId: taskId,
+        taskName: newTaskNameData,
+        deadline: newDeadlineData
     }
+    console.log(task);
+
+
+    axios({
+        method: 'post',
+        url: 'http://localhost:8080/api/performer?action=editTaskDetails',
+        data: task
+    })
+        .then(function (response) {
+
+            data = response.data;
+
+
+            newTaskName.innerHTML = `<h3 name="task-name" >\${data.taskName}</h3>`;
+            newDeadline.innerText = data.deadline;
+            console.log("susscess......")
+            console.log(data)
+
+            iziToast.success({
+                title: 'OK',
+                position: 'bottomRight',
+                timeout: 2500,
+                message: 'Successfully added performer!'
+            });
+
+
+        })
+        .catch((error) => {
+            console.log("error edit......")
+            iziToast.error({
+                title: 'Error',
+                position: 'bottomRight',
+                timeout: 1500,
+                message: error.response.data
+            });
+        });
+
+
+}
+
+window.onload = function (){
+    handleDeleting();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // show update task form
+    // var updateForm = document.getElementById("update-task-div");
+    //
+    // var openUpdateBtn = document.getElementById("open-update-form-btn");
+    //
+    // var spanClose = document.getElementsByClassName("close-update-btn")[0];
+    //
+    // openUpdateBtn.onclick = function () {
+    //     updateForm.style.display = "block";
+    // }
+    //
+    // spanClose.onclick = function () {
+    //     updateForm.style.display = "none";
+    // }
+    //
+    // window.onclick = function (event) {
+    //     if (event.target == updateForm) {
+    //         updateForm.style.display = "none";
+    //     }
+    // }
+
 
 </script>
 </body>

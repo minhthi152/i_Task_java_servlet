@@ -22,10 +22,10 @@
 
                 <div class = "row">
                     <div class = "col-md-8 form-group">
-                        <input type = "text" class = "form-control" placeholder = "Search">
+                        <input type = "text" class = "form-control" placeholder = "Search" id="search-box" name="word">
                     </div>
                     <div class = "col-md-4 form-group">
-                        <button type = "submit" class = "btn btn-success">
+                        <button type = "button" class = "btn btn-success" id="btn-search">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>

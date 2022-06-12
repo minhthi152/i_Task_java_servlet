@@ -1,6 +1,8 @@
 package com.thi.case3.dto;
 
+import com.thi.case3.models.Performer;
 import com.thi.case3.models.PermissionType;
+import com.thi.case3.models.User;
 
 public class PerformerDTO {
     private int id;
@@ -13,6 +15,14 @@ public class PerformerDTO {
     public PerformerDTO() {
     }
 
+    public PerformerDTO(Performer performer, User user){
+        this.id = performer.getId();
+        this.userId = performer.getUserId();
+        this.taskId = performer.getTaskId();
+        this.permissionId = performer.getPermissionId();
+        this.fullName = user.getFullName();
+        this.avatar = user.getAvatar();
+    }
     public PerformerDTO(int id, int userId, long taskId, PermissionType permissionId, String fullName, String avatar) {
         this.id = id;
         this.userId = userId;

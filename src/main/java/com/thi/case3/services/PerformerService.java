@@ -8,11 +8,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thi.case3.utils.MySQLConnection.getConnection;
+import static com.thi.case3.utils.MySQLConnection.printSQLException;
+
 public class PerformerService {
 
     private static final String VW_PERFORMER_DETAILS = "SELECT * FROM i_task.vw_performer_details WHERE task_id = ?;";
 
     private static final String SP_ADD_PERFOMER_TO_TASK = "CALL i_task.sp_add_performer_to_task(?, ?, ?, ?);";
+
+
+    private static final String DELETE_PERFORMER_BY_ID = "DELETE FROM performers WHERE id = ?;";
+
+    private static final String GET_PERFORMER_ID_BY_USER_ID_AND_TASK_ID = ""+
+            "SELECT id FROM performers " +
+            "WHERE user_id = ? AND task_id = ?;";
 
     public String addPerformerToTask(Performer newPerformer) {
         String message;
@@ -67,5 +77,45 @@ public class PerformerService {
         return performerDTOs;
     }
 
+    public boolean remove(int performerId) {
+        boolean isDeleted = false;
+
+        try{
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_PERFORMER_BY_ID);
+            preparedStatement.setInt(1, performerId);
+            preparedStatement.execute();
+
+            isDeleted = true;
+        } catch (SQLException e){
+            printSQLException(e);
+        }
+
+        return isDeleted;
+    }
+
+    public int getPerformerIdByUserIdAndTaskId(int userId, int taskId){
+        int id =-1;
+        try {
+            Connection connection = MySQLConnection.getConnection();
+
+
+            // "SELECT id FROM performers WHERE user_id = ? AND task_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_PERFORMER_ID_BY_USER_ID_AND_TASK_ID);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, taskId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                 id = rs.getInt("id");
+
+            }
+
+        } catch (SQLException e) {
+            MySQLConnection.printSQLException(e);
+            return id;
+        }
+        return id;
+    }
 
 }

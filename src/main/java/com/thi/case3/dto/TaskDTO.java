@@ -40,6 +40,7 @@ public class TaskDTO {
         this.statusName = statusName;
     }
 
+
     public long getId() {
         return id;
     }

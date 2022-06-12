@@ -3,7 +3,9 @@ package com.thi.case3.services;
 import com.thi.case3.dto.TaskDTO;
 import com.thi.case3.models.Status;
 import com.thi.case3.models.Task;
+import com.thi.case3.utils.MySQLConnection;
 
+import javax.management.Query;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import static com.thi.case3.utils.MySQLConnection.getConnection;
 import static com.thi.case3.utils.MySQLConnection.printSQLException;
 
 public class TaskService implements ITaskService{
+
+    private final String GET_TASK_BY_ID = "SELECT * FROM tasks WHERE id = ?;";
     private final String GET_TASKS_BY_STATUS = ""+
             "SELECT " +
                 "t.id, " +
@@ -63,6 +67,29 @@ public class TaskService implements ITaskService{
             "ON t.status_id = ts.id " +
             "WHERE t.id = ?;";
 
+    private final String SEARCH_BY_TASK_NAME = "" +
+            "SELECT " +
+            "t.id, " +
+            "t.task_name, " +
+            "t.create_date, " +
+            "t.deadline, " +
+            "t.creator_id, " +
+            "t.last_update, " +
+            "t.updated_by, " +
+            "t.status_id, " +
+            "t.description_ " +
+            "FROM tasks AS t " +
+            "WHERE task_name LIKE CONCAT('%', ?, '%');";
+
+
+    private final String UPDATE_TASK_NAME_AND_DEADLINE = "" +
+            "UPDATE i_task.tasks " +
+            "SET " +
+            "task_name = ?, " +
+            "deadline =  ? , " +
+            "last_update = NOW() " +
+            "WHERE tasks.id = ?;";
+
     @Override
     public List<Task> getTasksByStatus(Status status) {
         List<Task> tasks = new ArrayList<>();
@@ -104,8 +131,9 @@ public class TaskService implements ITaskService{
     @Override
     public Task addTask(Task newTask) {
         Task createdTask = null;
+
         try{
-            Connection connection = getConnection();
+            Connection connection  = getConnection();
             CallableStatement statement = connection.prepareCall(SP_CREATE_TASK);
             statement.setString(1,newTask.getTaskName());
             statement.setString(2, newTask.getDeadline());
@@ -130,6 +158,7 @@ public class TaskService implements ITaskService{
                 createdTask = new Task(id,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,Status.parseStatus(statusId),description, avatar);
             }
 
+            connection.close();
         } catch (SQLException e){
             printSQLException(e);
         }
@@ -185,6 +214,7 @@ public class TaskService implements ITaskService{
                 String statusName = rs.getString("status_");
                 taskDTO = new TaskDTO(taskId,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,Status.parseStatus(statusId),description, avatar, creatorFullName, statusName );
             }
+            connection.close();
         } catch (SQLException e) {
             printSQLException(e);
         }
@@ -202,8 +232,41 @@ public class TaskService implements ITaskService{
     }
 
     @Override
-    public void update(Task task) {
+    public Task update(Long id, String taskName, String deadline) {
+        Task task =null;
+        try {
+            Connection connection = MySQLConnection.getConnection();
 
+            PreparedStatement statement = connection.prepareStatement(UPDATE_TASK_NAME_AND_DEADLINE);
+            statement.setString(1, taskName);
+            statement.setString(2, deadline);
+            statement.setLong(3, id);
+            System.out.println("Query update: " + statement);
+            System.out.println("id: " + id + " taskName: " +taskName + " dealine: " + deadline);
+            statement.executeUpdate();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_TASK_BY_ID);
+            preparedStatement.setLong(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+
+                String createDate = rs.getString("create_date");
+                int creatorId = rs.getInt("creator_id");
+                String lastUpdate = rs.getString("last_update");
+                int updatedBy = rs.getInt("updated_by");
+                int statusId = rs.getInt("status_id");
+                String description = rs.getString("description_");
+
+                task = new Task(id,taskName,createDate,deadline, creatorId,updatedBy,lastUpdate,Status.parseStatus(statusId),description);
+            }
+
+
+        } catch (SQLException e) {
+            MySQLConnection.printSQLException(e);
+        }
+        return task;
     }
 
     @Override
@@ -222,5 +285,38 @@ public class TaskService implements ITaskService{
         }
 
         return isDeleted;
+    }
+
+
+
+    @Override
+    public List<Task> searchByTaskName(String word) {
+        List<Task> tasks = new ArrayList<>();
+
+        try{
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_TASK_NAME);
+            preparedStatement.setString(1,word);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String taskName = rs.getString("task_name");
+                String createDate = rs.getString("create_date");
+                String deadline = rs.getString("deadline");
+                int creatorId = rs.getInt("creator_id");
+                String lastUpdate = rs.getString("last_update");
+                int updatedBy = rs.getInt("updated_by");
+                int statusId = rs.getInt("status_id");
+                String description = rs.getString("description_");
+
+                tasks.add(new Task(id, taskName, createDate, deadline, creatorId, updatedBy, lastUpdate, Status.parseStatus(statusId), description));
+            }
+
+        } catch (SQLException e){
+            printSQLException(e);
+        }
+        return tasks;
     }
 }

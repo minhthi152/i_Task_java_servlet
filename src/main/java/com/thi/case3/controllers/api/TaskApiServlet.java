@@ -33,11 +33,16 @@ public class TaskApiServlet extends HttpServlet {
             case "getAllTasks":
                 getAllTasks(req,resp);
                 break;
+            case "searchTasks":
+                seachTasks(req, resp);
+                break;
             case "change-status":
                 changeStatus(req, resp);
                 break;
         }
     }
+
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -68,12 +73,15 @@ public class TaskApiServlet extends HttpServlet {
     private void getAllTasks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String json = null;
         resp.setContentType("application/json");
+
         resp.setCharacterEncoding("UTF-8");
 
         List<Task> pendingTasks = taskService.getTasksByStatus(Status.PENDING);
         json = new Gson().toJson(pendingTasks);
 
+
         resp.getWriter().write(json);
+
     }
 
     private void createTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -145,6 +153,25 @@ public class TaskApiServlet extends HttpServlet {
         }
 
         resp.getWriter().write(json);
+    }
+
+    private void seachTasks(HttpServletRequest req, HttpServletResponse resp) {
+
+        String json = null;
+        resp.setContentType("application/json");
+
+        resp.setCharacterEncoding("UTF-8");
+        String word = req.getParameter("word");
+
+        List<Task> searchedTasks = taskService.searchByTaskName(word);
+        json = new Gson().toJson(searchedTasks);
+
+
+        try {
+            resp.getWriter().write(json);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

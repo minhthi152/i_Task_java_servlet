@@ -20,7 +20,8 @@ public interface ITaskService {
 
     boolean checkDuplicateId(long id);
 
-    void update(Task task);
+    Task update(Long id, String taskName, String deadline);
 
     boolean remove(int taskId);
+    public List<Task> searchByTaskName(String taskName);
 }
